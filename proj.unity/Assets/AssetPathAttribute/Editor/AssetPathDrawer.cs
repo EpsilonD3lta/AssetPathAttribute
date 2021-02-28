@@ -1,9 +1,9 @@
-﻿using UnityEngine;
-using UnityEditor;
-using Object = UnityEngine.Object;
+﻿using System;
 using System.Collections.Generic;
-using System;
 using System.Reflection;
+using UnityEditor;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
 [CustomPropertyDrawer(typeof(AssetPath.Attribute))]
 public class AssetPathDrawer : PropertyDrawer
@@ -21,7 +21,7 @@ public class AssetPathDrawer : PropertyDrawer
 
 
     /// <summary>
-    /// Invoked when unity creates our drawer. 
+    /// Invoked when unity creates our drawer.
     /// </summary>
     public AssetPathDrawer()
     {
@@ -29,7 +29,7 @@ public class AssetPathDrawer : PropertyDrawer
     }
 
     /// <summary>
-    /// Invoked when we want to try our property. 
+    /// Invoked when we want to try our property.
     /// </summary>
     /// <param name="position">The position we have allocated on screen</param>
     /// <param name="property">The field our attribute is over</param>
@@ -41,7 +41,7 @@ public class AssetPathDrawer : PropertyDrawer
         {
             // Create a rect for our label
             Rect labelPosition = position;
-            // Set it's width 
+            // Set it's width
             labelPosition.width = EditorGUIUtility.labelWidth;
             // Draw it
             GUI.Label(labelPosition, label);
@@ -76,7 +76,7 @@ public class AssetPathDrawer : PropertyDrawer
         MethodInfo genericObjectPickerMethod = showObjectPickerMethod.MakeGenericMethod(type);
         // We have no starting target
         Object target = null;
-        // We are not allowing scene objects 
+        // We are not allowing scene objects
         bool allowSceneObjects = false;
         // An empty filter
         string searchFilter = string.Empty;
@@ -110,11 +110,11 @@ public class AssetPathDrawer : PropertyDrawer
         // Save our path
         string assetPath = property.stringValue;
         // Have a label to say it's missing
-        //bool isMissing = false;
+        bool isMissing = false;
         // Check if we have a key
         if (m_References.ContainsKey(property.propertyPath))
         {
-            // Get the value. 
+            // Get the value.
             propertyValue = m_References[property.propertyPath];
         }
         // Now if its null we try to load it
@@ -125,7 +125,7 @@ public class AssetPathDrawer : PropertyDrawer
 
             if (propertyValue == null)
             {
-                //isMissing = true;
+                isMissing = true;
             }
             else
             {
@@ -136,7 +136,10 @@ public class AssetPathDrawer : PropertyDrawer
         EditorGUI.BeginChangeCheck();
         {
             // Draw our object field.
+            Color oldColor = GUI.color;
+            GUI.color = isMissing ? new Color(1f, 0.8f, 0.8f, 1f) : new Color(0.9f, 1f, 0.9f, 1f);
             propertyValue = EditorGUI.ObjectField(position, label, propertyValue, objectType, false);
+            GUI.color = oldColor;
         }
         if (EditorGUI.EndChangeCheck())
         {

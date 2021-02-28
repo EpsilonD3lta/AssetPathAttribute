@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 [CreateAssetMenu]
 public class ValueExample : ScriptableObject
@@ -12,4 +11,6 @@ public class ValueExample : ScriptableObject
 
     [AssetPath.Attribute(typeof(AudioSource))]
     public string m_PlayerAudioSource;
+
+    public SceneReference scene;
 }
