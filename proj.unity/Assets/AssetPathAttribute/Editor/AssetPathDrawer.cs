@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -10,15 +9,9 @@ public class AssetPathDrawer : PropertyDrawer
 {
     // A helper warning label when the user puts the attribute above a non string type.
     private const string m_InvalidTypeLabel = "Attribute invalid for type ";
-    private const float m_ButtonWidth = 80f;
-    private static int s_PPtrHash = "s_PPtrHash".GetHashCode();
-    private string m_ActivePickerPropertyPath;
-    private int m_PickerControlID = -1;
-    private static GUIContent m_MissingAssetLabel = new GUIContent("Missing");
 
     // A shared array of references to the objects we have loaded
     private IDictionary<string, Object> m_References;
-
 
     /// <summary>
     /// Invoked when unity creates our drawer.
@@ -58,33 +51,6 @@ public class AssetPathDrawer : PropertyDrawer
         {
             HandleObjectReference(position, property, label);
         }
-
-    }
-
-    /// <summary>
-    /// Due to the fact that ShowObjectPicker does not have a none generic version we
-    /// have to use reflection to create and invoke it.
-    /// </summary>
-    /// <param name="type"></param>
-    private void ShowObjectPicker(Type type, Rect position)
-    {
-        // Get the type
-        Type classType = typeof(EditorGUIUtility);
-        // Get the method
-        MethodInfo showObjectPickerMethod = classType.GetMethod("ShowObjectPicker", BindingFlags.Public | BindingFlags.Static);
-        // Make the generic version
-        MethodInfo genericObjectPickerMethod = showObjectPickerMethod.MakeGenericMethod(type);
-        // We have no starting target
-        Object target = null;
-        // We are not allowing scene objects
-        bool allowSceneObjects = false;
-        // An empty filter
-        string searchFilter = string.Empty;
-        // Make a control ID
-        m_PickerControlID = GUIUtility.GetControlID(s_PPtrHash, FocusType.Passive, position);
-        // Save our property path
-        // Invoke it (We have to do this step since there is only a generic version for showing the asset picker.
-        genericObjectPickerMethod.Invoke(null, new object[] { target, allowSceneObjects, searchFilter, m_PickerControlID });
     }
 
     protected virtual SerializedProperty GetProperty(SerializedProperty rootProperty)

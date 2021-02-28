@@ -36,7 +36,6 @@ public class AssetPath
             m_Type = type;
             m_PathType = PathType.Project;
         }
-
     }
 
     /// <summary>
@@ -55,7 +54,6 @@ public class AssetPath
     }
 
     private const string RESOURCES_FOLDER_NAME = "/Resources/";
-    private const string ASSETS_FOLDER_NAME = "Assets/";
 
     /// <summary>
     /// Takes the string from the Asset Path Attribute and converts it into
