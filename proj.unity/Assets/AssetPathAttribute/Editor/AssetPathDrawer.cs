@@ -69,12 +69,13 @@ public class AssetPathDrawer : PropertyDrawer
 
     private void HandleObjectReference(Rect position, SerializedProperty property, GUIContent label)
     {
-
         Type objectType = ObjectType();
         // First get our value
         Object propertyValue = null;
         // Save our path
         string assetPath = property.stringValue;
+        label.tooltip = assetPath;
+        CopyPathMenu(position, property, assetPath);
         // Have a label to say it's missing
         bool isMissing = false;
         // Check if we have a key
@@ -86,6 +87,7 @@ public class AssetPathDrawer : PropertyDrawer
         // Now if its null we try to load it
         if (propertyValue == null && !string.IsNullOrEmpty(assetPath))
         {
+
             // Try to load our asset
             propertyValue = AssetDatabase.LoadAssetAtPath(assetPath, objectType);
 
@@ -107,7 +109,6 @@ public class AssetPathDrawer : PropertyDrawer
             propertyValue = EditorGUI.ObjectField(position, label, propertyValue, objectType, false);
             GUI.color = oldColor;
         }
-        label.tooltip = assetPath;
         if (EditorGUI.EndChangeCheck())
         {
             OnSelectionMade(propertyValue, property);
@@ -128,5 +129,32 @@ public class AssetPathDrawer : PropertyDrawer
         m_References[property.propertyPath] = newSelection;
         // Save it back
         property.stringValue = assetPath;
+    }
+
+    private void CopyPathMenu(Rect position, SerializedProperty property, string assetPath)
+    {
+        Event e = Event.current;
+        Rect contextRect = position;
+        if (e.type == EventType.ContextClick && contextRect.Contains(e.mousePosition))
+        {
+            GenericMenu context = new GenericMenu();
+            context.AddItem(new GUIContent("Copy Path"), property.isExpanded, CopyPath, assetPath);
+            context.ShowAsContext();
+            e.Use();
+        }
+        else if (e.type == EventType.MouseDown && e.button == 0 && position.Contains(e.mousePosition))
+        {
+            if (Event.current.modifiers == (EventModifiers.Alt | EventModifiers.Control)) // Command == Windows key
+            {
+                CopyPath(assetPath);
+                e.Use();
+            }
+        }
+    }
+
+    private void CopyPath(object assetPath)
+    {
+        GUIUtility.systemCopyBuffer = (string)assetPath;
+        UnityEngine.Debug.Log("assetPath copied to clipboard: " + assetPath);
     }
 }
