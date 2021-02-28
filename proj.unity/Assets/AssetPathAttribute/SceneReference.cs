@@ -5,29 +5,29 @@ using UnityEngine;
 public struct SceneReference
 {
     [SerializeField]
-    private string m_Name;
+    private string _name;
     [SerializeField]
-    private string m_Path;
+    private string _path;
     [SerializeField]
-    private int m_BuildIndex;
+    private int _buildIndex;
 
     /// <summary>
-    /// The name of the scene asset itself. 
+    /// The name of the scene asset itself.
     /// </summary>
-    public string name { get { return m_Name; } private set { m_Name = value; } }
+    public string name { get { return _name; } private set { _name = value; } }
 
     /// <summary>
-    /// The asset path to the scene. 
+    /// The asset path to the scene.
     /// </summary>
-    public string path { get { return m_Path; } private set { m_Path = value; } }
+    public string path { get { return _path; } private set { _path = value; } }
 
     /// <summary>
     /// The index of the scene in build settings
     /// </summary>
-    public int buildIndex { get { return m_BuildIndex; } private set { m_BuildIndex = value; } }
+    public int buildIndex { get { return _buildIndex; } private set { _buildIndex = value; } }
 
     /// <summary>
-    /// Returns back if the scene is in the build or not. 
+    /// Returns back if the scene is in the build or not.
     /// </summary>
     public bool isInBuild { get { return buildIndex >= 0; } }
 }

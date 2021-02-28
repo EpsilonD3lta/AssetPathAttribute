@@ -8,17 +8,17 @@ using Object = UnityEngine.Object;
 public class AssetPathDrawer : PropertyDrawer
 {
     // A helper warning label when the user puts the attribute above a non string type.
-    private const string m_InvalidTypeLabel = "Attribute invalid for type ";
+    private const string invalidTypeLabel = "Attribute invalid for type ";
 
     // A shared array of references to the objects we have loaded
-    private IDictionary<string, Object> m_References;
+    private IDictionary<string, Object> references;
 
     /// <summary>
     /// Invoked when unity creates our drawer.
     /// </summary>
     public AssetPathDrawer()
     {
-        m_References = new Dictionary<string, Object>();
+        references = new Dictionary<string, Object>();
     }
 
     /// <summary>
@@ -45,7 +45,7 @@ public class AssetPathDrawer : PropertyDrawer
             // Shrink it in width since we moved it over
             contentPosition.width -= labelPosition.width;
             // Draw our content warning;
-            EditorGUI.HelpBox(contentPosition, m_InvalidTypeLabel + this.fieldInfo.FieldType.Name, MessageType.Error);
+            EditorGUI.HelpBox(contentPosition, invalidTypeLabel + this.fieldInfo.FieldType.Name, MessageType.Error);
         }
         else
         {
@@ -79,10 +79,10 @@ public class AssetPathDrawer : PropertyDrawer
         // Have a label to say it's missing
         bool isMissing = false;
         // Check if we have a key
-        if (m_References.ContainsKey(property.propertyPath))
+        if (references.ContainsKey(property.propertyPath))
         {
             // Get the value.
-            propertyValue = m_References[property.propertyPath];
+            propertyValue = references[property.propertyPath];
         }
         // Now if its null we try to load it
         if (propertyValue == null && !string.IsNullOrEmpty(assetPath))
@@ -97,7 +97,7 @@ public class AssetPathDrawer : PropertyDrawer
             }
             else
             {
-                m_References[property.propertyPath] = propertyValue;
+                references[property.propertyPath] = propertyValue;
             }
         }
 
@@ -126,7 +126,7 @@ public class AssetPathDrawer : PropertyDrawer
         }
 
         // Save our value.
-        m_References[property.propertyPath] = newSelection;
+        references[property.propertyPath] = newSelection;
         // Save it back
         property.stringValue = assetPath;
     }

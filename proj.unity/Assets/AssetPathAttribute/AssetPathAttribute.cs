@@ -9,14 +9,14 @@ public class AssetPath
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
     public class Attribute : PropertyAttribute
     {
-        private Type m_Type;
+        private Type _type;
 
         /// <summary>
         /// Gets the type of asset this attribute is expecting.
         /// </summary>
         public Type type
         {
-            get { return m_Type; }
+            get { return _type; }
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ public class AssetPath
         /// </summary>
         public Attribute(Type type)
         {
-            m_Type = type;
+            _type = type;
         }
     }
 

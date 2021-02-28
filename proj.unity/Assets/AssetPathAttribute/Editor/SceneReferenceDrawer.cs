@@ -5,14 +5,14 @@ using UnityEngine.SceneManagement;
 [CustomPropertyDrawer(typeof(SceneReference))]
 public class SceneReferenceDrawer : AssetPathDrawer
 {
-    private SerializedProperty m_Name;
-    private SerializedProperty m_BuildIndex;
+    private SerializedProperty _name;
+    private SerializedProperty _buildIndex;
 
     protected override SerializedProperty GetProperty(SerializedProperty rootProperty)
     {
-        m_Name = rootProperty.FindPropertyRelative("m_Name");
-        m_BuildIndex = rootProperty.FindPropertyRelative("m_BuildIndex");
-        return rootProperty.FindPropertyRelative("m_Path");
+        _name = rootProperty.FindPropertyRelative("_name");
+        _buildIndex = rootProperty.FindPropertyRelative("_buildIndex");
+        return rootProperty.FindPropertyRelative("_path");
     }
 
     protected override Type ObjectType()
@@ -24,15 +24,15 @@ public class SceneReferenceDrawer : AssetPathDrawer
     {
         if (newSelection == null)
         {
-            m_Name.stringValue = "";
-            m_BuildIndex.intValue = -1;
+            _name.stringValue = "";
+            _buildIndex.intValue = -1;
         }
         else
         {
             string assetPath = AssetDatabase.GetAssetPath(newSelection);
             Scene scene = SceneManager.GetSceneByPath(assetPath);
-            m_Name.stringValue = scene.name;
-            m_BuildIndex.intValue = scene.buildIndex;
+            _name.stringValue = scene.name;
+            _buildIndex.intValue = scene.buildIndex;
         }
         base.OnSelectionMade(newSelection, property);
     }
