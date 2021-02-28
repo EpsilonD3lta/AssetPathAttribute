@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -10,16 +9,8 @@ public class AssetPathDrawer : PropertyDrawer
     // A helper warning label when the user puts the attribute above a non string type.
     private const string invalidTypeLabel = "Attribute invalid for type ";
 
-    // A shared array of references to the objects we have loaded
-    private IDictionary<string, Object> references;
-
-    /// <summary>
-    /// Invoked when unity creates our drawer.
-    /// </summary>
-    public AssetPathDrawer()
-    {
-        references = new Dictionary<string, Object>();
-    }
+    // A reference to the object we have loaded
+    private Object loadedAssetReference;
 
     /// <summary>
     /// Invoked when we want to try our property.
@@ -79,11 +70,12 @@ public class AssetPathDrawer : PropertyDrawer
         // Have a label to say it's missing
         bool isMissing = false;
         // Check if we have a key
-        if (references.ContainsKey(property.propertyPath))
+        if (loadedAssetReference != null)
         {
             // Get the value.
-            propertyValue = references[property.propertyPath];
+            propertyValue = loadedAssetReference;
         }
+
         // Now if its null we try to load it
         if (propertyValue == null && !string.IsNullOrEmpty(assetPath))
         {
@@ -97,7 +89,7 @@ public class AssetPathDrawer : PropertyDrawer
             }
             else
             {
-                references[property.propertyPath] = propertyValue;
+                loadedAssetReference = propertyValue;
             }
         }
 
@@ -126,7 +118,7 @@ public class AssetPathDrawer : PropertyDrawer
         }
 
         // Save our value.
-        references[property.propertyPath] = newSelection;
+        loadedAssetReference = newSelection;
         // Save it back
         property.stringValue = assetPath;
     }
