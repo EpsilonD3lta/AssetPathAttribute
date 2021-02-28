@@ -9,16 +9,7 @@ public class AssetPath
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
     public class Attribute : PropertyAttribute
     {
-        private PathType m_PathType;
         private Type m_Type;
-
-        /// <summary>
-        /// Gets the type of asset path this attribute is watching.
-        /// </summary>
-        public PathType pathType
-        {
-            get { return m_PathType; }
-        }
 
         /// <summary>
         /// Gets the type of asset this attribute is expecting.
@@ -34,23 +25,7 @@ public class AssetPath
         public Attribute(Type type)
         {
             m_Type = type;
-            m_PathType = PathType.Project;
         }
-    }
-
-    /// <summary>
-    /// A enum containing all the types of paths we can watch
-    /// </summary>
-    public enum PathType
-    {
-        /// <summary>
-        /// The path will be contained within the 'Asset/*' directory.
-        /// </summary>
-        Project,
-        /// <summary>
-        /// The path will be contained within a resources folder.
-        /// </summary>
-        Resources,
     }
 
     private const string RESOURCES_FOLDER_NAME = "/Resources/";
