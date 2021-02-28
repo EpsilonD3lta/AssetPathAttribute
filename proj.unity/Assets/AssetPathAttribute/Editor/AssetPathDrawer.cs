@@ -107,6 +107,7 @@ public class AssetPathDrawer : PropertyDrawer
             propertyValue = EditorGUI.ObjectField(position, label, propertyValue, objectType, false);
             GUI.color = oldColor;
         }
+        label.tooltip = assetPath;
         if (EditorGUI.EndChangeCheck())
         {
             OnSelectionMade(propertyValue, property);
